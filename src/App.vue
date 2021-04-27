@@ -5,5 +5,11 @@
   </div>
 </template>
 
-<style lang="scss">
-</style>
+<script>
+
+export default {
+  name: 'App'
+}
+</script>
+
+<style lang="scss" scoped></style>
