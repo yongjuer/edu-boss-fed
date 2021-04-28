@@ -14,23 +14,27 @@
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">登录</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="isLoginLoading">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import request from '@/utils/request'
-import qs from 'qs'
+// import request from '@/utils/request'
+// 引入封装的接口功能组件
+import { login } from '@/services/user'
+
 export default {
   name: 'LoginIndex',
   data () {
     return {
+      // 储存表单数据的对象
       form: {
         phone: '18201288771',
         password: '111111'
       },
+      // 用于设置表单校验规则
       rules: {
         phone: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -44,7 +48,9 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 18, message: '密码长度为 6 到 18 位', trigger: 'blur' }
         ]
-      }
+      },
+      // 用于表单
+      isLoginLoading: false
     }
   },
   methods: {
@@ -56,19 +62,25 @@ export default {
         await this.$refs.form.validate()
         // console.log('通过了校验')
         // 2.发送请求
-        const { data } = await request({
+        this.isLoginLoading = true
+        /* const { data } = await request({
           url: '/front/user/login',
           // headers: { 'content-type': 'application/x-www-form-urlencoded' },
           method: 'POST',
           data: qs.stringify(this.form)
-        })
+        }) */
+        const { data } = await login(this.form)
+
+        this.isLoginLoading = false
         // console.log(data)
         // 3.响应处理
         if (data.state === 1) {
-          this.$router.push({
-            name: 'home'
-          })
           this.$message.success('登录成功')
+          // 登录成功后 将用户信息存储到 vuex 中
+          this.$store.commit('setUser', data.content)
+          // 根据可能存在的 redirect 数据进行跳转
+          // console.log(this.$route)
+          this.$router.push(this.$route.query.redirect || '/')
         } else {
           this.$message.error('登录失败')
         }
