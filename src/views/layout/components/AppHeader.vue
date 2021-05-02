@@ -34,6 +34,8 @@ export default {
   created () {
     // 加载用户信息
     this.loadUserInfo()
+    this.loadUserInfo()
+    this.loadUserInfo()
   },
   data () {
     return {

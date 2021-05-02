@@ -72,6 +72,18 @@ const routes = [
         path: '/role',
         name: 'role',
         component: () => import(/* webpackChunkName: 'role' */'@/views/role/index')
+      },
+      // 添加菜单页面的路由组建
+      {
+        path: '/menu/create',
+        name: 'menu-create',
+        component: () => import(/* webpackChunkName: 'menu-create' */'@/views/menu/menuCreate')
+      },
+      // 编辑菜单页面的路由组建
+      {
+        path: '/menu/:id/edit',
+        name: 'menu-edit',
+        component: () => import(/* webpackChunkName: 'menu-create' */'@/views/menu/editMenu')
       }
     ]
   },
